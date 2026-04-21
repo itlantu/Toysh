@@ -1,0 +1,13 @@
+# ide and tools
+.idea
+.vs
+.vscode
+.trae
+.claude
+
+# build
+build
+cmake-build-*
+
+# third party
+third_party
