@@ -33,7 +33,7 @@ static const char escape_values[] = {ESCAPE_KV()};
 
 const unsigned int escape_kv_length = sizeof(escape_keys) / sizeof(const char);
 
-ToyshState toysh_parser(char* input, int* argc, char** argv, const int argv_size){
+ToyshState toysh_parser(char* input, int* argc, char** argv, const int argv_size) {
     if (input == NULL)
         return TOYSH_ERR_ARG_1_NULL;
     if (argv == NULL)
@@ -69,7 +69,7 @@ ToyshState toysh_parser(char* input, int* argc, char** argv, const int argv_size
                     parser_state = PARSER_START;
                     continue;
                 }
-                if (ch == '\\'){
+                if (ch == '\\') {
                     parser_state = PARSER_STRING_ESCAPE;
                     break;
                 }
@@ -81,9 +81,9 @@ ToyshState toysh_parser(char* input, int* argc, char** argv, const int argv_size
                     if (ch == escape_keys[l])
                         break;
                 }
-                if (l == escape_kv_length)
+                if (l == escape_kv_length) {
                     --i;
-                else {
+                } else {
                     str_offset += 1;
                     input[i - str_offset] = escape_values[l];
                 }
