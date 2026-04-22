@@ -35,3 +35,7 @@ if(${TOYSH_ENABLE_TEST})
     enable_testing()
     add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/tests")
 endif()
+
+if(${MSVC})
+    add_compile_options(utf-8)
+endif ()
