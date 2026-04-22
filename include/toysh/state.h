@@ -13,7 +13,7 @@ extern "C" {
     X(TOYSH_ERR_ARG_3_NULL) \
 
 #define X(name) name,
-typedef enum{
+typedef enum {
     TOYSH_STATE_ENUM()
     TOYSH_ENUM_LENGTH,
 }ToyshState;
@@ -25,4 +25,4 @@ const char* get_state_name(ToyshState state);
 }
 #endif  // __cplusplus
 
-#endif //  TOYSH_STATE_H
+#endif  //  TOYSH_STATE_H

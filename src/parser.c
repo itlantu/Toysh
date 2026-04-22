@@ -33,7 +33,7 @@ static const char escape_values[] = {ESCAPE_KV()};
 
 const unsigned int escape_kv_length = sizeof(escape_keys) / sizeof(const char);
 
-ToyshState toysh_parser(char* input, int* argc, char** argv, const int argv_size){
+ToyshState toysh_parser(char* input, int* argc, char** argv, const int argv_size) {
     if (input == NULL)
         return TOYSH_ERR_ARG_1_NULL;
     if (argv == NULL)
@@ -42,7 +42,7 @@ ToyshState toysh_parser(char* input, int* argc, char** argv, const int argv_size
         return TOYSH_ERR_ARG_3_NULL;
 
     enum ParserState parser_state = PARSER_START;
-    unsigned int j = 0, start_index = 0;
+    unsigned int str_offset = 0, start_index = 0;
     char ch;
     *argc = 0;
 
@@ -63,17 +63,17 @@ ToyshState toysh_parser(char* input, int* argc, char** argv, const int argv_size
             break;
             case PARSER_STRING:
                 if (ch == '"') {
-                    input[i - j] = '\0';
+                    input[i - str_offset] = '\0';
                     argv_push(argv, argv_size, argc, &input[start_index + 1]);
-                    j = 0;
+                    str_offset = 0;
                     parser_state = PARSER_START;
                     continue;
                 }
-                if (ch == '\\'){
+                if (ch == '\\') {
                     parser_state = PARSER_STRING_ESCAPE;
                     break;
                 }
-                input[i - j] = ch;
+                input[i - str_offset] = ch;
             break;
             case PARSER_STRING_ESCAPE:
                 int l = 0;
@@ -81,11 +81,11 @@ ToyshState toysh_parser(char* input, int* argc, char** argv, const int argv_size
                     if (ch == escape_keys[l])
                         break;
                 }
-                if (l == escape_kv_length)
+                if (l == escape_kv_length) {
                     --i;
-                else {
-                    j += 1;
-                    input[i - j] = escape_values[l];
+                } else {
+                    str_offset += 1;
+                    input[i - str_offset] = escape_values[l];
                 }
                 parser_state = PARSER_STRING;
             break;
