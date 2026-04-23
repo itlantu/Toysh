@@ -9,12 +9,14 @@ enum ParserState{
     PARSER_STRING_ESCAPE,
 };
 
-int argv_push(char** argv, const int argv_size, int* index, char* value) {
+ToyshState argv_push(char** argv, const int argv_size, int* index, char* value) {
+    if (*index < 0)
+        return TOYSH_ERR_INDEX_UNDER;
     if (*index >= argv_size)
-        return -1;
+        return TOYSH_ERR_INDEX_OVER;
     argv[*index] = value;
     *index += 1;
-    return 0;
+    return TOYSH_OK;
 }
 
 #define ESCAPE_KV() \
@@ -32,6 +34,13 @@ static const char escape_values[] = {ESCAPE_KV()};
 #undef X
 
 const unsigned int escape_kv_length = sizeof(escape_keys) / sizeof(const char);
+
+#define TOYSH_PARSER_ARGV_PUSH() \
+    do{\
+        const ToyshState _result = argv_push(argv, argv_size, argc, &input[start_index]); \
+        if(_result != TOYSH_OK) \
+        return _result; \
+    }while (0)
 
 ToyshState toysh_parser(char* input, int* argc, char** argv, const int argv_size) {
     if (input == NULL)
@@ -58,13 +67,14 @@ ToyshState toysh_parser(char* input, int* argc, char** argv, const int argv_size
                 if (!isspace(ch))
                     break;
                 input[i] = '\0';
-                argv_push(argv, argv_size, argc, &input[start_index]);
+                TOYSH_PARSER_ARGV_PUSH();
                 parser_state = PARSER_START;
             break;
             case PARSER_STRING:
                 if (ch == '"') {
                     input[i - str_offset] = '\0';
-                    argv_push(argv, argv_size, argc, &input[start_index + 1]);
+                    start_index += 1;
+                    TOYSH_PARSER_ARGV_PUSH();
                     str_offset = 0;
                     parser_state = PARSER_START;
                     continue;
@@ -92,6 +102,6 @@ ToyshState toysh_parser(char* input, int* argc, char** argv, const int argv_size
         }
     }
     if (parser_state != PARSER_START)
-        argv_push(argv, argv_size, argc, &input[start_index]);
+        TOYSH_PARSER_ARGV_PUSH();
     return TOYSH_OK;
 }
