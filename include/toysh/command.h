@@ -25,16 +25,16 @@ static const ToyshCommand* __start_toysh_section = NULL;
 __declspec(allocate("toysh_section$c"))
 static const ToyshCommand* __stop_toysh_section = NULL;
 #define TOYSH_EXPORT_COMMAND(name, help, func) \
-    static const ToyshCommand _toysh_cmd ## __COUNTER__ = {name, help, func};\
-    const __declspec(allocate("toysh_section$b")) \
-    static const ToyshCommand* _toysh_ptr ## __COUNTER__ = &_toysh_cmd ## __COUNTER__
+    static const ToyshCommand _toysh_cmd ## __COUNTER__ ## __LINE__ = {name, help, func};\
+    __declspec(allocate("toysh_section$b")) \
+        static const ToyshCommand* _toysh_ptr ## __COUNTER__ ## __LINE__ = &_toysh_cmd ##  __COUNTER__ ## __LINE__
 #define TOYSH_SECTION_BEGIN()   ((const ToyshCommand**)(&__start_toysh_section + 1))
 #define TOYSH_SECTION_END()     ((const ToyshCommand**)(&__stop_toysh_section))
 
 #else
 
 #define TOYSH_EXPORT_COMMAND(name, help, func) \
-    static ToyshCommand _toysh_cmd_##__COUNTER__ \
+    static ToyshCommand _toysh_cmd_ ## __COUNTER__ ## __LINE__ \
     __attribute__((section("toysh_section"))) = {name, help, func}
 extern const ToyshCommand __start_toysh_section;
 extern const ToyshCommand __stop_toysh_section;
