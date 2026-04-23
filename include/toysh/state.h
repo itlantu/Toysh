@@ -11,6 +11,8 @@ extern "C" {
     X(TOYSH_ERR_ARG_1_NULL) \
     X(TOYSH_ERR_ARG_2_NULL) \
     X(TOYSH_ERR_ARG_3_NULL) \
+    X(TOYSH_ERR_INDEX_OVER) \
+    X(TOYSH_ERR_INDEX_UNDER)
 
 #define X(name) name,
 typedef enum {
