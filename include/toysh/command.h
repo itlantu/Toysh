@@ -15,17 +15,15 @@ typedef struct ToyshCommand {
     ToyshFunc func;
 }ToyshCommand;
 
-
 #if defined(_MSC_VER) && !defined(__clang__)
+
 #pragma section("toysh_section$a", read)
 #pragma section("toysh_section$b", read)
 #pragma section("toysh_section$c", read)
-
 __declspec(allocate("toysh_section$a"))
 static const ToyshCommand* __start_toysh_section = NULL;
 __declspec(allocate("toysh_section$c"))
 static const ToyshCommand* __stop_toysh_section = NULL;
-
 #define TOYSH_EXPORT_COMMAND(name, help, func) \
     static const ToyshCommand _toysh_cmd ## __COUNTER__ = {name, help, func};\
     const __declspec(allocate("toysh_section$b")) \
