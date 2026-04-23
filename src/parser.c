@@ -36,11 +36,11 @@ static const char escape_values[] = {ESCAPE_KV()};
 const unsigned int escape_kv_length = sizeof(escape_keys) / sizeof(const char);
 
 #define TOYSH_PARSER_ARGV_PUSH() \
-    do{\
+    do {\
         const ToyshState _result = argv_push(argv, argv_size, argc, &input[start_index]); \
-        if(_result != TOYSH_OK) \
-        return _result; \
-    }while (0)
+        if (_result != TOYSH_OK) \
+            return _result; \
+    } while (0)
 
 ToyshState toysh_parser(char* input, int* argc, char** argv, const int argv_size) {
     if (input == NULL)
