@@ -30,10 +30,10 @@ function(add_toysh_test_target target)
     gtest_discover_tests(${target})
 endfunction()
 
-if (${MSVC})
+if(${MSVC})
     # For Windows: Prevent overriding the parent project's compiler/linker settings
     set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-endif ()
+endif()
 
 add_subdirectory(test_compile)
 add_subdirectory(test_parser)
