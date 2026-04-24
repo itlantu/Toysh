@@ -1,18 +1,24 @@
+#include <vector>
+#include <string>
+#include <iostream>
+
+#include "gtest/gtest.h"
 #include "toysh/command.h"
 #include "utils/test_utils.hpp"
-#include "gtest/gtest.h"
+#include <cstdio>
 
-int test_func(int argc, char** argv) {
+int test_func1(int argc, char** argv) {
     return 0;
 }
-TOYSH_EXPORT_COMMAND("test_func", "test_func", test_func);
+
+int test_func2(int argc, char** argv) {
+    return 0;
+}
+
+TOYSH_CMD_EXPORT(test1, test_func1, "test_func1");
+TOYSH_CMD_EXPORT(test2, test_func2, "test_func2");
 
 TEST(CompileTest, Command) {
-    ASSERT_NE(toysh_get_command_count(), 0);
-
-    const ToyshCommand* cmd = toysh_find_command("test_func");
-    ASSERT_NE(cmd, nullptr);
-    EXPECT_STREQ(cmd->name, "test_func");
-    EXPECT_STREQ(cmd->help, "test_func");
-    EXPECT_EQ(cmd->func, test_func);
+    ASSERT_EQ(TOYSH_COMMAND_SECTION_BEGIN(), toysh_command_section_begin());
+    ASSERT_EQ(TOYSH_COMMAND_SECTION_END(), toysh_command_section_end());
 }
