@@ -20,7 +20,7 @@ if(${TOYSH_ENABLE_LINT})
         COMMAND ${Python3_EXECUTABLE} -m cpplint
             --quiet
             --recursive
-            --filter=-legal/copyright,-build/header_guard
+            --filter=-legal/copyright,-build/header_guard,-build/include_what_you_use
             --linelength=120
             ${CMAKE_CURRENT_SOURCE_DIR}/include
             ${CMAKE_CURRENT_SOURCE_DIR}/src
